@@ -18,7 +18,7 @@ describe('<NavigationHome />', () => {
       .invoke('text')
       .then((text) => {
         const strippedText = text.trim();
-        expect(strippedText).to.equal('TestChat');
+        expect(strippedText).to.equal('LLM Aggregator');
       });
 
     cy.get('button').should('have.length', 2);

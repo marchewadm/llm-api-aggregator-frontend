@@ -20,7 +20,7 @@ const buttonText = computed(() => {
       to="#"
       class="text-2xl font-medium tracking-tighter"
     >
-      TestChat
+      LLM Aggregator
     </RouterLink>
     <div class="flex gap-1">
       <Button

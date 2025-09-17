@@ -1,8 +1,10 @@
 import ButtonIcon from '@/components/custom/button/ButtonIcon.vue';
 
+// Mounting ButtonIcon as any due to this bug: https://github.com/cypress-io/cypress/issues/26628
+
 describe('<ButtonIcon />', () => {
   it('should render a button containing only an icon', () => {
-    cy.mount(ButtonIcon, {
+    cy.mount(ButtonIcon as any, {
       props: {
         iconName: 'plus'
       }
@@ -13,7 +15,7 @@ describe('<ButtonIcon />', () => {
   });
 
   it('should render a button with a default variant', () => {
-    cy.mount(ButtonIcon, {
+    cy.mount(ButtonIcon as any, {
       props: {
         iconName: 'plus',
         variant: 'default'
@@ -28,7 +30,7 @@ describe('<ButtonIcon />', () => {
   });
 
   it('should render a button with a destructive variant', () => {
-    cy.mount(ButtonIcon, {
+    cy.mount(ButtonIcon as any, {
       props: {
         iconName: 'plus',
         variant: 'destructive'
@@ -48,7 +50,7 @@ describe('<ButtonIcon />', () => {
   });
 
   it('should render a button with an outline variant', () => {
-    cy.mount(ButtonIcon, {
+    cy.mount(ButtonIcon as any, {
       props: {
         iconName: 'plus',
         variant: 'outline'
@@ -70,7 +72,7 @@ describe('<ButtonIcon />', () => {
   });
 
   it('should render a button with a secondary variant', () => {
-    cy.mount(ButtonIcon, {
+    cy.mount(ButtonIcon as any, {
       props: {
         iconName: 'plus',
         variant: 'secondary'
@@ -90,7 +92,7 @@ describe('<ButtonIcon />', () => {
   });
 
   it('should render a button with a ghost variant', () => {
-    cy.mount(ButtonIcon, {
+    cy.mount(ButtonIcon as any, {
       props: {
         iconName: 'plus',
         variant: 'ghost'
@@ -105,7 +107,7 @@ describe('<ButtonIcon />', () => {
   });
 
   it('should render a button with a link variant', () => {
-    cy.mount(ButtonIcon, {
+    cy.mount(ButtonIcon as any, {
       props: {
         iconName: 'plus',
         variant: 'link'
@@ -120,7 +122,7 @@ describe('<ButtonIcon />', () => {
   });
 
   it('should render a button with a default size', () => {
-    cy.mount(ButtonIcon, {
+    cy.mount(ButtonIcon as any, {
       props: {
         iconName: 'plus',
         size: 'default'
@@ -133,7 +135,7 @@ describe('<ButtonIcon />', () => {
   });
 
   it('should render a button with a xs size', () => {
-    cy.mount(ButtonIcon, {
+    cy.mount(ButtonIcon as any, {
       props: {
         iconName: 'plus',
         size: 'xs'
@@ -146,7 +148,7 @@ describe('<ButtonIcon />', () => {
   });
 
   it('should render a button with a sm size', () => {
-    cy.mount(ButtonIcon, {
+    cy.mount(ButtonIcon as any, {
       props: {
         iconName: 'plus',
         size: 'sm'
@@ -159,7 +161,7 @@ describe('<ButtonIcon />', () => {
   });
 
   it('should render a button with a lg size', () => {
-    cy.mount(ButtonIcon, {
+    cy.mount(ButtonIcon as any, {
       props: {
         iconName: 'plus',
         size: 'lg'
@@ -172,7 +174,7 @@ describe('<ButtonIcon />', () => {
   });
 
   it('should render a button with an icon size', () => {
-    cy.mount(ButtonIcon, {
+    cy.mount(ButtonIcon as any, {
       props: {
         iconName: 'plus',
         size: 'icon'
@@ -185,7 +187,7 @@ describe('<ButtonIcon />', () => {
   });
 
   it('should render a button with an icon and left-aligned text', () => {
-    cy.mount(ButtonIcon, {
+    cy.mount(ButtonIcon as any, {
       props: {
         iconName: 'plus',
         size: 'sm'
@@ -201,7 +203,7 @@ describe('<ButtonIcon />', () => {
   });
 
   it('should render a button with an icon and right-aligned text', () => {
-    cy.mount(ButtonIcon, {
+    cy.mount(ButtonIcon as any, {
       props: {
         iconName: 'minus',
         size: 'sm'
@@ -217,7 +219,7 @@ describe('<ButtonIcon />', () => {
   });
 
   it('should render a button with a custom icon class', () => {
-    cy.mount(ButtonIcon, {
+    cy.mount(ButtonIcon as any, {
       props: {
         iconName: 'plus',
         iconClass: 'w-10 h-10'
