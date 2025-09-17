@@ -16,7 +16,8 @@ The repository with the application's backend is located at [this link](https://
 
 ## Prerequisites
 
-- Node.js v.20 or higher.
+- **Node.js v.20** or higher, only if you are not using Docker.
+- **Docker** - it is not required, but if you want to speed up the installation process, it is recommended to use Docker.
 
 ## Before Usage
 
