@@ -1,34 +1,26 @@
-# chattyAI
+# LLM API Aggregator (Frontend)
 
-Chatty AI is a tool that allows you to store your chats from various LLMs in one place. Its frontend is built using Vue.js, Pinia, VeeValidate, VueUse, and @vueuse/motion, with components delivered through shadcn-vue for a smooth user experience.
+LLM API Aggregator is a tool that allows you to store your chats from various LLMs in one place. Its frontend is built using Vue.js, Pinia, VeeValidate, VueUse, and @vueuse/motion, with components delivered through shadcn-vue for a smooth user experience.
+
+The repository with the application's backend is located at [this link](https://github.com/marchewadm/llm-api-aggregator-backend). Make sure to set it up, otherwise the application will not work properly.
+
+## Table Of Contents
+
+- [Prerequisites](#prerequisites)
+- [Before Usage](#before-usage)
+- [Installation](#installation)
+  - [Cloning The Repository](#cloning-the-repository)
+    - [Running The Project Via Docker Compose (Recommended)](#running-the-project-via-docker-compose-recommended)
+    - [Running The Project Without Docker](#running-the-project-without-docker)
+- [License](#license)
 
 ## Prerequisites
 
-- Node.js v.20 or higher
+- Node.js v.20 or higher.
 
-## Installation
+## Before Usage
 
-### Clone a repository
-
-```bash
-git clone https://github.com/marchewadm/chattyAI.git
-```
-
-### Navigate to the root directory
-
-```bash
-cd chattyAI
-```
-
-### Install all necessary dependencies
-
-```bash
-npm install
-```
-
-## Before usage
-
-Before running application, make sure that `.env` file is created.
+Before installing application, make sure that `.env` file is created.
 
 The `.env` file should look like this:
 
@@ -40,26 +32,56 @@ NOTE:
 
 - Remember to adjust `VITE_BACKEND_URL` according to where the backend API is running. If it is running locally, your URL should look like this: `VITE_BACKEND_URL=http://localhost:8000/api`.
 
-## Usage
+## Installation
+
+### Cloning The Repository
+
+```bash
+git clone https://github.com/marchewadm/llm-api-aggregator-frontend.git
+cd llm-api-aggregator-frontend
+```
+
+#### Running The Project Via Docker Compose (Recommended)
+
+1. **Build Docker Image**
+
+```bash
+docker compose build
+```
+
+2. **Run The Container**
+
+```bash
+docker compose up -d
+```
+
+3. **Stop The Container**
+
+```bash
+docker compose down
+```
+
+#### Running The Project Without Docker
+
+1. **Install All Dependencies**
+
+```bash
+npm install
+```
+
+2. **Usage**
 
 Run one of the commands below to start using your app:
 
 - Development mode:
-
-  ```bash
-  # After executing command below, the server should start running at the address http://localhost:5173
-  npm run dev
-  ```
+```bash
+npm run dev
+```
 
 - Production mode:
-  ```bash
-  npm run build
-  ```
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first
-to discuss what you would like to change.
+```bash
+npm run build
+```
 
 ## License
 
