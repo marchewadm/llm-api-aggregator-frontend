@@ -6,6 +6,7 @@ The repository with the application's backend is located at [this link](https://
 
 ## Table Of Contents
 
+- [Demo](#demo)
 - [Prerequisites](#prerequisites)
 - [Before Usage](#before-usage)
 - [Installation](#installation)
@@ -13,6 +14,10 @@ The repository with the application's backend is located at [this link](https://
     - [Running The Project Via Docker Compose (Recommended)](#running-the-project-via-docker-compose-recommended)
     - [Running The Project Without Docker](#running-the-project-without-docker)
 - [License](#license)
+
+## Demo
+
+https://github.com/user-attachments/assets/4d0dd8c1-d570-44ac-9942-9cd799fb8c0c
 
 ## Prerequisites
 
