@@ -8,7 +8,7 @@ const mode = useColorMode();
 
 <template>
   <ButtonIcon
-    :iconName="mode === 'light' ? 'moon-outline' : 'sunny-outline'"
+    :iconName="mode === 'light' ? 'moon' : 'sun'"
     @click="toggleColorMode"
   />
 </template>

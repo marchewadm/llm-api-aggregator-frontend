@@ -1,47 +1,36 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/shadcn/button';
+import type { ComputedRef } from 'vue';
+import type { ButtonVariants } from '@/components/shadcn/button';
 
-import type { PropType } from 'vue';
-import type { ButtonVariant } from '@/types/button';
-import type { ButtonSize } from '@/types/button';
+interface Props {
+  iconName: string | ComputedRef<string>;
+  iconClass?: string;
+  size?: ButtonVariants['size'];
+  variant?: ButtonVariants['variant'];
+}
 
-const iconPrefix = 'ion';
+const {
+  iconName,
+  iconClass = 'h-[1.2rem] w-[1.2rem]',
+  size = 'icon',
+  variant = 'ghost'
+} = defineProps<Props>();
 
-defineProps({
-  iconName: {
-    type: String,
-    required: true
-  },
-  iconClass: {
-    type: String,
-    default: 'h-[1.2rem] w-[1.2rem]'
-  },
-  isIconFirst: {
-    type: Boolean,
-    default: false
-  },
-  variant: {
-    type: String as PropType<ButtonVariant>,
-    default: 'ghost'
-  },
-  size: {
-    type: String as PropType<ButtonSize>,
-    default: 'icon'
-  },
-  text: {
-    type: String
-  },
-  textClass: {
-    type: String
-  }
-});
+const iconPrefix = 'tabler';
 </script>
 
 <template>
-  <Button :variant="variant" :size="size">
-    <Icon :icon="`${iconPrefix}:${iconName}`" :class="iconClass" v-if="isIconFirst" />
-    <span :="{ class: textClass }" v-if="text">{{ text }}</span>
-    <Icon :icon="`${iconPrefix}:${iconName}`" :class="iconClass" v-if="!isIconFirst" />
+  <Button
+    :size="size"
+    :variant="variant"
+  >
+    <slot name="optionalTextOnLeft"></slot>
+    <Icon
+      :icon="`${iconPrefix}:${iconName}`"
+      :class="iconClass"
+    />
+    <slot name="optionalTextOnRight"></slot>
   </Button>
 </template>

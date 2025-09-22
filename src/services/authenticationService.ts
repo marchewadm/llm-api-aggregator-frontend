@@ -1,63 +1,42 @@
-import axios from 'axios';
-import { useToast } from '@/components/ui/toast';
+import { HttpStatusCode } from 'axios';
 import { useUserStore } from '@/stores/userStore';
-import { handleAxiosError } from '@/utils/utils';
-import type { RegisterData, LoginData } from '@/types/zodInferredTypes';
+import {
+  handleAxiosError,
+  displayErrorNotification,
+  displaySuccessNotification
+} from '@/utils/utils';
+import { registerUserClient, loginUserClient } from '@/api/authenticationClient';
+import type { RegisterUser, LoginUser } from '@/types/authentication.types';
 import type { Router } from 'vue-router';
 
-// Set the prefix URL for the authentication routes, just to make the code look cleaner.
-const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/authentication`;
-
-const { toast } = useToast();
-
-export async function createUserService(registerData: RegisterData) {
+export async function registerUserService(registerUserData: RegisterUser) {
   try {
-    const url = `${prefixURL}/register`;
+    const response = await registerUserClient(registerUserData);
 
-    const response = await axios.post(url, registerData);
-
-    if (response?.status === 200) {
+    if (response?.status === HttpStatusCode.Ok) {
       // If the response is OK, notify the user that they have successfully registered and now they need to verify their email to get full access.
-      // The backend will send a verification email or if the email is already taken, the user with that email will be notified that someone tried to register with their email.
-      toast({
-        title: 'Success',
-        description: response.data.message
-      });
+      displaySuccessNotification(response.data.message);
     }
   } catch (err) {
-    toast({
-      title: 'Error',
-      description: 'Something went wrong. Please try again.',
-      variant: 'destructive'
-    });
+    displayErrorNotification('Something went wrong. Please try again.');
   }
 }
 
-export async function loginUserService(loginData: LoginData, router: Router) {
+export async function loginUserService(loginUserData: LoginUser, router: Router) {
   try {
-    const url = `${prefixURL}/token`;
-    const { setAccessToken } = useUserStore();
-
+    const userStore = useUserStore();
+    const { setAccessToken } = userStore;
     // Create a new FormData object due to the way the backend expects that data (OAuth2PasswordRequestForm in FastAPI).
     const formData = new FormData();
-    formData.append('username', loginData.email);
-    formData.append('password', loginData.password);
+    formData.append('username', loginUserData.email);
+    formData.append('password', loginUserData.password);
 
-    // Call the API to get the access token.
-    const response = await axios.post<{ access_token: string }>(url, formData);
+    const response = await loginUserClient(formData);
 
-    if (response?.status === 200) {
-      // If the response is OK, set the received token in the user store.
+    if (response?.status === HttpStatusCode.Ok) {
       setAccessToken(response.data.access_token);
-
-      // Redirect the user to the chat view.
-      await router.push({ name: 'Chat' });
-
-      // Notify the user that they have successfully logged in.
-      toast({
-        title: 'Success',
-        description: 'You have successfully logged in.'
-      });
+      await router.push({ name: 'ChatCreate' });
+      displaySuccessNotification('You have successfully logged in.');
     }
   } catch (err) {
     handleAxiosError(err, router);
@@ -65,12 +44,10 @@ export async function loginUserService(loginData: LoginData, router: Router) {
 }
 
 export function logoutUserService(router: Router) {
-  const { $reset } = useUserStore();
+  const userStore = useUserStore();
+  const { $reset } = userStore;
 
   $reset();
   router.push({ name: 'Home' });
-  toast({
-    title: 'Success',
-    description: 'You have successfully logged out.'
-  });
+  displaySuccessNotification('You have successfully logged out.');
 }

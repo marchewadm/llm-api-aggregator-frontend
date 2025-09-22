@@ -1,41 +1,36 @@
-import axios from 'axios';
-import { useUserStore } from '@/stores/userStore';
-import { useChatStore } from '@/stores/chatStore';
 import { storeToRefs } from 'pinia';
-import { handleAxiosError } from '@/utils/utils';
+import { useUserStore } from '@/stores/userStore';
+import { displaySuccessNotification, handleAxiosError } from '@/utils/utils';
+import { getApiKeysClient, updateApiKeysClient } from '@/api/apiKeysClient';
+import { usePassphraseValidationBus } from '@/utils/eventBus';
 import type { Router } from 'vue-router';
-import type { ApiKeysData } from '@/types/zodInferredTypes';
-import type { ApiKeyData } from '@/types/apiKey';
+import type { Passphrase } from '@/types/passphrase.types';
+import type { UpdateApiKeys } from '@/types/apiKeys.types';
 
-// Set the prefix URL for the api keys routes, just to make the code look cleaner.
-const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/api-keys`;
-
-export async function getApiKeysService(router: Router) {
-  const userStore = useUserStore();
-  const { accessToken } = storeToRefs(userStore);
-  const { setUserApiKeysData } = useChatStore();
-
+export async function getApiKeysService(passphraseData: Passphrase, router: Router) {
   try {
-    const response = await axios.get<ApiKeyData[]>(`${prefixURL}/`, {
-      headers: { Authorization: `Bearer ${accessToken.value}` }
-    });
+    const userStore = useUserStore();
+    const { accessToken } = storeToRefs(userStore);
+    const { setUserApiKeys } = userStore;
+    const { emitSuccess } = usePassphraseValidationBus();
 
-    setUserApiKeysData(response.data);
+    const response = await getApiKeysClient(passphraseData, accessToken.value!);
+    setUserApiKeys(response.data.apiKeysDetails);
+    emitSuccess();
   } catch (err) {
     handleAxiosError(err, router);
   }
 }
 
-export async function updateApiKeysService(apiKeysData: ApiKeysData, router: Router) {
-  const userStore = useUserStore();
-  const { accessToken } = storeToRefs(userStore);
-
+export async function updateApiKeysService(apiKeys: UpdateApiKeys, router: Router) {
   try {
-    const url = `${prefixURL}/update`;
+    const userStore = useUserStore();
+    const { accessToken } = storeToRefs(userStore);
 
-    await axios.patch(url, apiKeysData.apiKeys, {
-      headers: { Authorization: `Bearer ${accessToken.value}` }
-    });
+    const response = await updateApiKeysClient(apiKeys, accessToken.value!);
+    displaySuccessNotification(response.data.message);
+
+    return response;
   } catch (err) {
     handleAxiosError(err, router);
   }

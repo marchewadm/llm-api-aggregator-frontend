@@ -1,86 +1,80 @@
-import axios from 'axios';
-import { useUserStore } from '@/stores/userStore';
 import { storeToRefs } from 'pinia';
-import { useToast } from '@/components/ui/toast';
-import { handleAxiosError } from '@/utils/utils';
-import type { UserProfileData } from '@/types/user';
-import type { PartialProfileAccountData, ProfilePasswordData } from '@/types/zodInferredTypes';
+import { useUserStore } from '@/stores/userStore';
+import { displaySuccessNotification, handleAxiosError } from '@/utils/utils';
+import {
+  getUserProfileClient,
+  updateUserProfileClient,
+  updateUserPasswordClient,
+  updateUserPassphraseClient
+} from '@/api/userClient';
 import type { Router } from 'vue-router';
-
-// Set the prefix URL for the user routes, just to make the code look cleaner.
-const prefixURL = `${import.meta.env.VITE_BACKEND_URL}/user`;
-
-const { toast } = useToast();
+import type {
+  PartialProfileAccountDetails,
+  ProfilePasswordDetails
+} from '@/types/settingsProfile.types';
 
 export async function getUserProfileService(router: Router) {
-  const userStore = useUserStore();
-  const { setUserProfileData } = userStore;
-  const { accessToken } = storeToRefs(userStore);
-
   try {
-    const url = `${prefixURL}/profile`;
+    const userStore = useUserStore();
+    const { setUserProfile } = userStore;
+    const { accessToken } = storeToRefs(userStore);
 
-    const response = await axios.get<UserProfileData>(url, {
-      headers: { Authorization: `Bearer ${accessToken.value}` }
-    });
+    const response = await getUserProfileClient(accessToken.value!);
 
-    setUserProfileData(response.data);
+    setUserProfile(response.data);
   } catch (err) {
     handleAxiosError(err, router);
   }
 }
 
 export async function updateUserProfileService(
-  partialProfileAccountData: PartialProfileAccountData,
+  partialProfileAccount: PartialProfileAccountDetails,
   router: Router
 ) {
-  const userStore = useUserStore();
-  const { updateUserProfileData } = userStore;
-  const { accessToken } = storeToRefs(userStore);
-
   try {
-    const url = `${prefixURL}/update-profile`;
+    const userStore = useUserStore();
+    const { updateUserProfile } = userStore;
+    const { accessToken } = storeToRefs(userStore);
 
-    const response = await axios.patch<{ message: string; name?: string }>(
-      url,
-      partialProfileAccountData,
-      {
-        headers: { Authorization: `Bearer ${accessToken.value}` }
-      }
-    );
+    const response = await updateUserProfileClient(partialProfileAccount, accessToken.value!);
 
-    toast({
-      title: 'Success',
-      description: response.data.message
-    });
+    displaySuccessNotification(response.data.message);
 
-    if (response.data.name) updateUserProfileData(response.data);
+    if (response.data.name) {
+      updateUserProfile({ name: response.data.name });
+    }
   } catch (err) {
     handleAxiosError(err, router);
   }
 }
 
 export async function updateUserPasswordService(
-  profilePasswordData: ProfilePasswordData,
+  profilePasswordDetails: ProfilePasswordDetails,
   router: Router
 ) {
-  const userStore = useUserStore();
-  const { $reset } = userStore;
-  const { accessToken } = storeToRefs(userStore);
-
   try {
-    const url = `${prefixURL}/update-password`;
+    const userStore = useUserStore();
+    const { $reset } = userStore;
+    const { accessToken } = storeToRefs(userStore);
 
-    const response = await axios.patch<{ message: string }>(url, profilePasswordData, {
-      headers: { Authorization: `Bearer ${accessToken.value}` }
-    });
+    const response = await updateUserPasswordClient(profilePasswordDetails, accessToken.value!);
 
     $reset();
     await router.push({ name: 'Home' });
-    toast({
-      title: 'Success',
-      description: response.data.message
-    });
+    displaySuccessNotification(response.data.message);
+  } catch (err) {
+    handleAxiosError(err, router);
+  }
+}
+
+export async function updateUserPassphraseService(router: Router) {
+  try {
+    const userStore = useUserStore();
+    const { accessToken } = storeToRefs(userStore);
+
+    const response = await updateUserPassphraseClient(accessToken.value!);
+
+    return response.data.passphrase;
   } catch (err) {
     handleAxiosError(err, router);
   }

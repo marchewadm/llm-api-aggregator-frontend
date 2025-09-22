@@ -16,6 +16,7 @@ module.exports = {
     ecmaVersion: 'latest'
   },
   rules: {
-    semi: ['warn', 'always']
+    semi: ['warn', 'always'],
+    'vue/multi-word-component-names': 0
   }
 };

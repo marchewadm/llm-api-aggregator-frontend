@@ -73,7 +73,12 @@ module.exports = {
         sm: 'calc(var(--radius) - 4px)'
       },
       gridTemplateRows: {
-        'auto-1fr': 'auto 1fr'
+        'auto-1fr': 'auto 1fr',
+        '2auto-1fr': 'auto auto 1fr'
+      },
+      gridTemplateColumns: {
+        'auto-1fr': 'auto 1fr',
+        '1fr-2auto': '1fr auto auto'
       },
       keyframes: {
         'accordion-down': {
